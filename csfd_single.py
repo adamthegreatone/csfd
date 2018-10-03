@@ -42,6 +42,15 @@ def log_error(e):
     """
     print(e)
 
+def write_function(id):
+    with open('D:\\webscraping\\files\\csfd_27_09_2018.csv', 'a', newline='', encoding="utf8") as f:
+        writer = csv.writer(f, delimiter=',')
+        writer.writerow(one_row)
+
+    print('processing movie id:{}'.format(id))
+    print(
+        'time elapsed: {}'.format(str(datetime.timedelta(seconds=((time.time() - start_time))))).split(".")[0])
+    id += 1
 
 
 start_time = time.time()
@@ -60,7 +69,6 @@ for id in range(1,318000):
     soup = BeautifulSoup(raw_html, 'html.parser')
 
     one_row.append(str(id))
-
 
     try:
         one_row.append(" ".join((soup.find('div', {'class': 'header'}).find('h1', {'itemprop': 'name'}).text).split()))
@@ -87,6 +95,7 @@ for id in range(1,318000):
     except:
         one_row.append('')
 
+
     if (soup.find('div',{'class': 'creators'}).find('span',{'itemprop': 'director'})):
         i=0
         row_creators = []
@@ -96,31 +105,11 @@ for id in range(1,318000):
                 i += 1
             except:
                 one_row.append(row_creators)
-                with open('D:\\webscraping\\files\\csfd_27_09_2018.csv', 'a', newline='', encoding="utf8") as f:
-                    writer = csv.writer(f, delimiter=',')
-                    writer.writerow(one_row)
-
-                print('processing movie id:{}'.format(id))
-                print('time elapsed: {}'.format(str(datetime.timedelta(seconds=((time.time() - start_time))))).split(".")[0])
-                id += 1
+                write_function(id)
                 break
     else:
         one_row.append('')
-        with open('D:\\webscraping\\files\\csfd_27_09_2018.csv', 'a', newline='', encoding="utf8") as f:
-            writer = csv.writer(f, delimiter=',')
-            writer.writerow(one_row)
-
-        print('processing movie id:{}'.format(id))
-        print('time elapsed: {}'.format(str(datetime.timedelta(seconds=((time.time() - start_time))))).split(".")[0])
-        id += 1
-
-
-
-# print(one_row)
-# print(one_row)
-# print(one_row)
-# print(one_row)
-
+        write_function(id)
 
 
 
