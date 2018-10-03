@@ -43,13 +43,12 @@ def log_error(e):
     print(e)
 
 def write_function(id):
-    with open('D:\\webscraping\\files\\csfd_27_09_2018.csv', 'a', newline='', encoding="utf8") as f:
-        writer = csv.writer(f, delimiter=',')
+    with open('D:\\webscraping\\files\\csfd.csv', 'a', newline='', encoding="utf8") as f:
+        writer = csv.writer(f, delimiter=';')
         writer.writerow(one_row)
 
-    print('processing movie id:{}'.format(id))
-    print(
-        'time elapsed: {}'.format(str(datetime.timedelta(seconds=((time.time() - start_time))))).split(".")[0])
+    print('processing movie id: {};'.format(id),'process time: {:.3f}s;'.format(time.time() - start_of_process), 'time elapsed: {}'.format(str(datetime.timedelta(seconds=((time.time() - start_time))))).split(".")[0])
+    # print('time elapsed: {}'.format(str(datetime.timedelta(seconds=((time.time() - start_time))))).split(".")[0])
     id += 1
 
 
@@ -57,12 +56,13 @@ start_time = time.time()
 
 
 try:
-    os.remove('D:\\webscraping\\files\\csfd_27_09_2018.csv')
+    os.remove('D:\\webscraping\\files\\csfd.csv')
 except:
     pass
 
 for id in range(1,318000):
 
+    start_of_process = time.time()
     one_row = []
     url = 'https://www.csfd.cz/film/{}'.format(id)
     raw_html = simple_get(url)
