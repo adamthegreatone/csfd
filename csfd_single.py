@@ -52,7 +52,7 @@ try:
 except:
     pass
 
-for id in range(1110,318000):
+for id in range(1,318000):
 
     one_row = []
     url = 'https://www.csfd.cz/film/{}'.format(id)
@@ -101,7 +101,6 @@ for id in range(1110,318000):
                     writer.writerow(one_row)
 
                 print('processing movie id:{}'.format(id))
-                # print(len(one_row))
                 print('time elapsed: {}'.format(str(datetime.timedelta(seconds=((time.time() - start_time))))).split(".")[0])
                 id += 1
                 break
@@ -112,14 +111,14 @@ for id in range(1110,318000):
             writer.writerow(one_row)
 
         print('processing movie id:{}'.format(id))
-        # print(len(one_row))
         print('time elapsed: {}'.format(str(datetime.timedelta(seconds=((time.time() - start_time))))).split(".")[0])
         id += 1
 
 
 
 # print(one_row)
-
+# print(one_row)
+# print(one_row)
 
 
 
