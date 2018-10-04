@@ -4,6 +4,7 @@ from contextlib import closing
 from bs4 import BeautifulSoup
 import csv
 import os
+import re
 import time
 import datetime
 
@@ -44,7 +45,7 @@ def log_error(e):
 
 def write_function(id):
     with open('D:\\webscraping\\files\\csfd.csv', 'a', newline='', encoding="utf8") as f:
-        writer = csv.writer(f, delimiter=';')
+        writer = csv.writer(f, delimiter='\t')
         writer.writerow(one_row)
 
     print('processing movie id: {};'.format(id),'process time: {:.3f}s;'.format(time.time() - start_of_process), 'time elapsed: {}'.format(str(datetime.timedelta(seconds=((time.time() - start_time))))).split(".")[0])
@@ -86,14 +87,45 @@ for id in range(1,318000):
         one_row.append('')
 
     try:
-        one_row.append(soup.find('div', {'class': 'count'}).text.strip().replace('\xa0',''))
+        one_row.append(soup.find('div', {'class': 'count'}).text.strip().replace('\xa0','').replace('všechna hodnocení(','').replace(')',''))
     except:
         one_row.append('')
 
-    try:
-        one_row.append(soup.find('p',{'class': 'origin'}).text)
-    except:
+
+    origin = soup.find('p', {'class': 'origin'}).text
+
+
+    if origin.split(', ')[0][0].isalpha():
+        one_row.append(origin.split(', ')[0])
+        try:
+            origin.split(', ')[1]
+            if re.findall(r'(\d{4})', origin.split(', ')[1]):
+                one_row.append(origin.split(', ')[1])
+                try:
+                    origin.split(', ')[2]
+                    one_row.append(origin.split(', ')[2])
+                except:
+                    one_row.append('')
+            else:
+                one_row.append('')
+                one_row.append(origin.split(', ')[1])
+        except:
+            one_row.append('')
+            one_row.append('')
+
+    elif re.findall(r'(\d{4})', origin.split(', ')[0]):
         one_row.append('')
+        one_row.append(origin.split(', ')[0])
+        try:
+            origin.split(', ')[1]
+            one_row.append(origin.split(', ')[1])
+        except:
+            one_row.append('')
+    else:
+        one_row.append('')
+        one_row.append('')
+        one_row.append(origin.split(', ')[0])
+
 
 
     if (soup.find('div',{'class': 'creators'}).find('span',{'itemprop': 'director'})):
